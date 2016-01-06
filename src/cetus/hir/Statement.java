@@ -26,6 +26,9 @@ public abstract class Statement implements Cloneable, Traversable, Annotatable {
     /** The position of the statement */
     protected int line_number = -1;
 
+    /** The source of the statement */
+    protected String source;
+
     /** The list of annotations attached to the statement */
     protected List<Annotation> annotations;
 
@@ -38,6 +41,7 @@ public abstract class Statement implements Cloneable, Traversable, Annotatable {
         parent = null;
         children = new ArrayList<Traversable>(1);
         annotations = null;
+        source=null;
     }
 
     /**
@@ -353,6 +357,14 @@ public abstract class Statement implements Cloneable, Traversable, Annotatable {
     */
     public void setLineNumber(int line) {
         line_number = line;
+    }
+
+    public void setSource(String src) {
+        source=src;
+    }
+
+    public String getSource() {
+        return source;
     }
 
     /** Returns a string representation of the statement */

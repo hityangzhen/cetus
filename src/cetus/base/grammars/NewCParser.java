@@ -4297,7 +4297,7 @@ inputState.guessing--;
 		int linenum = 0;
 		SymbolTable prev_symtab = null;
 		CompoundStatement prev_cstmt = null;
-		
+		String source=null;
 		
 		try {      // for error handling
 			lcur = LT(1);
@@ -4305,11 +4305,18 @@ inputState.guessing--;
 			if ( inputState.guessing==0 ) {
 				
 				linenum = lcur.getLine();
+				// %add yangzhen 2016-1-5
+				if(lcur instanceof CToken)
+					source=((CToken)lcur).getSource();
+				else
+					source=getFilename();
 				prev_symtab = symtab;
 				prev_cstmt = curr_cstmt;
 				stmt = new CompoundStatement();
 				enterSymtab(stmt);
 				stmt.setLineNumber(linenum);
+				// %add yangzhen 2016-1-5
+				stmt.setSource(source);
 				putPragma(lcur,prev_symtab);
 				curr_cstmt = stmt;
 				
@@ -4455,6 +4462,11 @@ inputState.guessing--;
 				if ( inputState.guessing==0 ) {
 					
 					linenum = rcur.getLine();
+					// %add yangzhen 2016-1-5
+					if(rcur instanceof CToken)
+						source=((CToken)rcur).getSource();
+					else
+						source=getFilename();
 					putPragma(rcur,symtab);
 					curr_cstmt = prev_cstmt;
 					exitSymtab();
@@ -4801,7 +4813,8 @@ inputState.guessing--;
 		Declaration decl = null;
 		int a=0;
 		int sline = 0;
-		
+		// %add yangzhen 2016-1-5
+		String source=null;
 		
 		try {      // for error handling
 			switch ( LA(1)) {
@@ -4812,6 +4825,11 @@ inputState.guessing--;
 				if ( inputState.guessing==0 ) {
 					
 					sline = tsemi.getLine();
+					// %add yangzhen 2016-1-5
+					if(tsemi instanceof CToken)
+						source=((CToken)tsemi).getSource();
+					else
+						source=getFilename();
 					statb = new NullStatement();
 					putPragma(tsemi,symtab);
 					
@@ -4831,6 +4849,11 @@ inputState.guessing--;
 				if ( inputState.guessing==0 ) {
 					
 					sline = twhile.getLine();
+					// %add yangzhen 2016-1-5
+					if(twhile instanceof CToken)
+						source=((CToken)twhile).getSource();
+					else
+						source=getFilename();
 					putPragma(twhile,symtab);
 					
 				}
@@ -4841,7 +4864,8 @@ inputState.guessing--;
 					
 					statb = new WhileLoop(expr1, stmt1);
 					statb.setLineNumber(sline);
-					
+					// %add yangzhen 2016-1-5
+					statb.setSource(source);
 				}
 				break;
 			}
@@ -4852,6 +4876,11 @@ inputState.guessing--;
 				if ( inputState.guessing==0 ) {
 					
 					sline = tdo.getLine();
+					// %add yangzhen 2016-1-5
+					if(tdo instanceof CToken)
+						source=((CToken)tdo).getSource();
+					else
+						source=getFilename();
 					putPragma(tdo,symtab);
 					
 				}
@@ -4865,7 +4894,7 @@ inputState.guessing--;
 					
 					statb = new DoLoop(stmt1, expr1);
 					statb.setLineNumber(sline);
-					
+					statb.setSource(source);
 				}
 				break;
 			}
@@ -4876,6 +4905,11 @@ inputState.guessing--;
 				if ( inputState.guessing==0 ) {
 					
 					sline = tfor.getLine();
+					// %add yangzhen 2016-1-5
+					if(tfor instanceof CToken)
+						source=((CToken)tfor).getSource();
+					else
+						source=getFilename();
 					putPragma(tfor,symtab);
 					
 				}
@@ -5028,7 +5062,8 @@ inputState.guessing--;
 					}
 					}
 					statb.setLineNumber(sline);
-					
+					// %add yangzhen 2016-1-5
+					statb.setSource(source);
 				}
 				break;
 			}
@@ -5039,6 +5074,11 @@ inputState.guessing--;
 				if ( inputState.guessing==0 ) {
 					
 					sline = tgoto.getLine();
+					// %add yangzhen 2016-1-5
+					if(tgoto instanceof CToken)
+						source=((CToken)tgoto).getSource();
+					else
+						source=getFilename();
 					putPragma(tgoto,symtab);
 					
 				}
@@ -5049,7 +5089,7 @@ inputState.guessing--;
 					
 					statb = new GotoStatement(new NameID(gotoTarget.getText()));
 					statb.setLineNumber(sline);
-					
+					statb.setSource(source);
 				}
 				break;
 			}
@@ -5076,9 +5116,15 @@ inputState.guessing--;
 				if ( inputState.guessing==0 ) {
 					
 					sline = tbreak.getLine();
+					// %add yangzhen 2016-1-5
+					if(tbreak instanceof CToken)
+						source=((CToken)tbreak).getSource();
+					else
+						source=getFilename();
 					statb = new BreakStatement();
 					statb.setLineNumber(sline);
 					putPragma(tbreak,symtab);
+					statb.setSource(source);
 					
 				}
 				break;
@@ -5090,7 +5136,11 @@ inputState.guessing--;
 				if ( inputState.guessing==0 ) {
 					
 					sline = treturn.getLine();
-					
+					// %add yangzhen 2016-1-5
+					if(treturn instanceof CToken)
+						source=((CToken)treturn).getSource();
+					else
+						source=getFilename();
 				}
 				{
 				switch ( LA(1)) {
@@ -5136,6 +5186,7 @@ inputState.guessing--;
 					else
 					statb=new ReturnStatement();
 					statb.setLineNumber(sline);
+					statb.setSource(source);
 					putPragma(treturn,symtab);
 					
 				}
@@ -5249,6 +5300,11 @@ inputState.guessing--;
 				if ( inputState.guessing==0 ) {
 					
 					sline = tif.getLine();
+					// %add yangzhen 2016-1-5
+					if(tif instanceof CToken)
+						source=((CToken)tif).getSource();
+					else
+						source=getFilename();
 					putPragma(tif,symtab);
 					
 				}
@@ -5275,7 +5331,8 @@ inputState.guessing--;
 					else
 					statb = new IfStatement(expr1,stmt1);
 					statb.setLineNumber(sline);
-					
+					// %add yangzhen 2016-1-5
+					statb.setSource(source);
 				}
 				break;
 			}
@@ -5315,11 +5372,18 @@ inputState.guessing--;
 					if ( inputState.guessing==0 ) {
 						
 						sline = exprsemi.getLine();
-
+						// %add yangzhen 2016-1-5
+						if(exprsemi instanceof CToken)
+							source=((CToken)exprsemi).getSource();
+						else
+							source=getFilename();
+						
 						putPragma(exprsemi,symtab);
 						/* I really shouldn't do this test */
 						statb = new ExpressionStatement(stmtb_expr);
-						statb.setLineNumber(sline);						
+						statb.setLineNumber(sline);	
+						// %add yangzhen 2016-1-5
+						statb.setSource(source);					
 					}
 				}
 				else if ((LA(1)==ID) && (LA(2)==COLON)) {
@@ -5329,10 +5393,17 @@ inputState.guessing--;
 					if ( inputState.guessing==0 ) {
 						
 						sline = lid.getLine();
+						// %add yangzhen 2016-1-5
+						if(lid instanceof CToken)
+							source=((CToken)lid).getSource();
+						else
+							source=getFilename();
 						Object o = null;
 						Declaration target = null;
 						statb = new Label(new NameID(lid.getText()));
 						statb.setLineNumber(sline);
+						// %add yangzhen 2016-1-5
+						statb.setSource(source);
 						putPragma(lid,symtab);
 						
 					}
